@@ -8,13 +8,24 @@ pipeline
     maven 'MyMaven-2'
   }
 
+  parameters {
+    string(name: 'NAME', defaultValue: 'Neelotpal Chaulia', description: 'Enter your name')
+    string(name: 'EMAIL', defaultValue: 'neelchaulia@gmail.com', description: 'Enter your email')
+  }
+
+  environment {
+    NAME = "Neelotpal Chaulia"
+    EMAIL = "neelchaulia@gmail.com"
+  }
+
   stages
   {
     stage('Build')
     {
       steps
       {
-        sh 'mvn clean package'
+        // sh 'mvn clean package'
+        echo "Hello, ${params.NAME}. Your email is ${params.EMAIL}"
       }
       
       post {
