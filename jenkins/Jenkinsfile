@@ -28,10 +28,10 @@ pipeline
         echo "Hello, ${params.NAME}. Your email is ${params.EMAIL}"
       }
       
-      post {
+      /*post {
         success {
-          // archiveArtifacts artifacts: '**/target/*.war'
-        }
+          archiveArtifacts artifacts: '**/target/*.war'
+        } */
       }
     }
   }
