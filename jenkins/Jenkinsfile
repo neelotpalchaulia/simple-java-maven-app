@@ -3,6 +3,11 @@ pipeline
   agent {
   label 'server-1'
   }
+
+  tools {
+    maven 'MyMaven-2'
+  }
+
   stages
   {
     stage('Build')
