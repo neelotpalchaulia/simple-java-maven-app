@@ -58,7 +58,7 @@ pipeline
       }
     }
 
-    stage('Deploy')
+    stage('Deploy_development')
     {
       when {
         expression { return params.NAME == 'Neelotpal Chaulia' && params.EMAIL == 'neelchaulia@gmail.com' }
@@ -71,5 +71,7 @@ pipeline
             // sh 'scp target/*.war user@server:/path/to/deploy/'
           }
         }
+      }
+    }
   }
 }
