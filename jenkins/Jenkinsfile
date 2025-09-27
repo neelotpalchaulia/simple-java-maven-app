@@ -27,30 +27,49 @@ pipeline
         // sh 'mvn clean package'
         echo "Hello, ${params.NAME}. Your email is ${params.EMAIL}"
       }
-      
-//      post {
-//        success {
-          // archiveArtifacts artifacts: '**/target/*.war'
-//        } 
-//      }
     }
     
     stage('Test')
     {
       parallel {
         stage('Unit Tests') {
+          agent { label 'server-1' }
           steps {
             echo 'Running Unit Tests...'
             // sh 'mvn test -Dtest=UnitTest*'
           }
         }
         stage('Integration Tests') {
+          agent { label 'server-1' }
           steps {
             echo 'Running Integration Tests...'
             // sh 'mvn verify -Dtest=IntegrationTest*'
           }
         }
       }
+      post {
+      success {
+          // archiveArtifacts artifacts: '**/target/*.war'
+          dir ('simple-java-maven-app') // Apache syntax to change directory
+          {
+            stash name: 'app', includes: '**/target/*.war'
+          }
+        } 
+      }
     }
+
+    stage('Deploy')
+    {
+      when {
+        expression { return params.NAME == 'Neelotpal Chaulia' && params.EMAIL == 'neelchaulia@gmail.com' }
+        beforeAgent true // Evaluate condition before allocating agent
+        agent { label 'server-1' }
+        steps {
+          dir ('simple-java-maven-app') {
+            unstash 'app'
+            echo 'Deploying the application...'
+            // sh 'scp target/*.war user@server:/path/to/deploy/'
+          }
+        }
   }
 }
