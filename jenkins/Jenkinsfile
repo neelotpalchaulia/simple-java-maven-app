@@ -34,5 +34,23 @@ pipeline
 //        } 
 //      }
     }
+    
+    stage('Test')
+    {
+      parallel {
+        stage('Unit Tests') {
+          steps {
+            echo 'Running Unit Tests...'
+            // sh 'mvn test -Dtest=UnitTest*'
+          }
+        }
+        stage('Integration Tests') {
+          steps {
+            echo 'Running Integration Tests...'
+            // sh 'mvn verify -Dtest=IntegrationTest*'
+          }
+        }
+      }
+    }
   }
 }
