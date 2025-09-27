@@ -26,6 +26,10 @@ pipeline
       {
         // sh 'mvn clean package'
         echo "Hello, ${params.NAME}. Your email is ${params.EMAIL}"
+        script {
+          def script = load 'script.groovy'
+          script.hello()
+        }
       }
     }
     
@@ -58,13 +62,16 @@ pipeline
       }
     }
 
-    stage('Deploy_development')
+    stage('Deploy_production')
     {
       when {
         expression { return params.NAME == 'Neelotpal Chaulia' && params.EMAIL == 'neelchaulia@gmail.com' }
         beforeAgent true // Evaluate condition before allocating agent
         agent { label 'server-1' }
         steps {
+          timeout(time: 1, unit: 'MINUTES') {
+            input message: 'Approve deployment to production?', ok: 'Deploy'}
+          }
           dir ('simple-java-maven-app') {
             unstash 'app'
             echo 'Deploying the application...'
